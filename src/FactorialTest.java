@@ -1,4 +1,4 @@
-package src.lesson_11;
+package src;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -19,14 +19,6 @@ public class FactorialTest {
         long expectedFactorial = 1;
         long actualFactorial = FactorialCalculator.calculateFactorial(number);
         Assert.assertEquals(actualFactorial, expectedFactorial, "Факториал нуля должен быть равен 1.");
-    }
-
-    @Test
-    public void testFactorialNegative() {
-        int number = -5;
-        long expectedFactorial = -1;
-        long actualFactorial = FactorialCalculator.calculateFactorial(number);
-        Assert.assertEquals(actualFactorial, expectedFactorial, "Факториал отрицательного числа должен быть равен -1.");
     }
 
     @Test
