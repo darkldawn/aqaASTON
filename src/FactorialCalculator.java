@@ -18,9 +18,9 @@ public class FactorialCalculator {
     }
     public static long calculateFactorial(int number) {
         if (number < 0) {
-            return -1; // Факториал не определен для отрицательных чисел
+            return -1; 
         } else if (number == 0) {
-            return 1; // Факториал 0 равен 1
+            return 1; 
         } else {
             long factorial = 1;
             for (int i = 1; i <= number; i++) {
