@@ -24,7 +24,7 @@ public class MtsSiteTest {
     private static final String EXPECTED_MODAL_TITLE = "499.00 BYN";
     private static final String EXPECTED_INFO_TEXT = "Оплатить 499.00 BYN";
     private static final String EXPECTED_PHONE_FIELD = "375297777777";
-    private static final String EXPECTED_PHONE_PLACEHOLDER = "Phone number";
+    private static final String EXPECTED_PHONE_PLACEHOLDER = "Номер телефона";
     private static final String EXPECTED_SUM_PLACEHOLDER = "Сумма";
     private static final String EXPECTED_EMAIL_PLACEHOLDER = "E-mail для отправки чека";
 
