@@ -1,6 +1,6 @@
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -11,15 +11,15 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MtsSiteTest {
 
     private WebDriver driver;
     private WebDriverWait wait;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         System.setProperty("webdriver.chrome.driver", "/Users/darkldawn/Documents/GitHub/chromedriver");
         driver = new ChromeDriver();
@@ -55,25 +55,25 @@ public class MtsSiteTest {
 
         private void checkPaymentWindow(String вашОжидаемыйТекстСуммы) {
             WebElement modalTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("pay-description__cost")));
-            assertTrue("Модальное окно должно содержать текст: " + вашОжидаемыйТекстСуммы,
-                    modalTitle.getText().contains(вашОжидаемыйТекстСуммы));
+            assertTrue(modalTitle.getText().contains(вашОжидаемыйТекстСуммы),
+                    "Модальное окно должно содержать текст: " + вашОжидаемыйТекстСуммы);
         }
 
         private void checkInfo(String вашОжидаемыйТекстСуммы) {
             WebElement button2 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".colored.disabled")));
-            assertTrue("Кнопка подтверждения должна содержать текст: " + вашОжидаемыйТекстСуммы,
-                    button2.getText().contains(вашОжидаемыйТекстСуммы));
+            assertTrue(button2.getText().contains(вашОжидаемыйТекстСуммы),
+                    "Кнопка подтверждения должна содержать текст: " + вашОжидаемыйТекстСуммы);
         }
 
         private void checkPhoneField(String вашНомерТелефона) {
             WebElement phoneField = driver.findElement(By.xpath("/html/body/app-root/div/div/div/app-payment-container/section/div/div/div[2]"));
-            assertTrue("Поле телефона должно содержать: " + вашНомерТелефона,
-                    phoneField.getText().contains("Оплата: Услуги связи Номер:" + вашНомерТелефона));
+            assertTrue(phoneField.getText().contains("Оплата: Услуги связи Номер:" + вашНомерТелефона),
+                    "Поле телефона должно содержать: " + вашНомерТелефона);
         }
 
         private void checkPaymentIcons() {
             WebElement paymentIcons = driver.findElement(By.xpath("/html/body/app-root/div/div/div/app-payment-container/section/div/app-card-page/div/div[1]/app-card-input/form/div[1]/div[1]/app-input/div/div/div[2]"));
-            assertTrue("Должны быть отображены иконки платежных систем", paymentIcons.isDisplayed());
+            assertTrue(paymentIcons.isDisplayed(), "Должны быть отображены иконки платежных систем");
         }
 
         private void checkFieldPlaceholders(String срокДействия, String CVC, String имяДержателяКакНаКарте, String номерКарты) {
@@ -81,10 +81,10 @@ public class MtsSiteTest {
             WebElement label2 = driver.findElement(By.xpath("//label[contains(text(), 'CVC')]"));
             WebElement label3 = driver.findElement(By.xpath("//label[contains(text(), 'Имя держателя (как на карте)')]"));
             WebElement label4 = driver.findElement(By.xpath("//label[contains(text(), 'Номер карты')]"));
-            assertEquals("Поле срока действия должно содержать предусмотренную подсказку", срокДействия, label1.getText());
-            assertEquals("Поле CVC должно содержать предусмотренную подсказку", CVC, label2.getText());
-            assertEquals("Поле имени владельца должно содержать предусмотренную подсказку", имяДержателяКакНаКарте, label3.getText());
-            assertEquals("Поле номера карты должно содержать предусмотренную подсказку", номерКарты, label4.getText());
+            assertEquals(срокДействия, label1.getText(), "Срок действия ");
+            assertEquals(CVC, label2.getText(), "CVC");
+            assertEquals(имяДержателяКакНаКарте, label3.getText(), "Имя держателя(как на карте)");
+            assertEquals(номерКарты, label4.getText(), "Номер карты");
         }
 
         @Test
@@ -120,9 +120,9 @@ public class MtsSiteTest {
             waitForElement(By.xpath("//*[@id=\"connection-email\"]"));
             WebElement field3 = driver.findElement(By.xpath("//*[@id=\"connection-email\"]"));
 
-            assertTrue("Поле 1 должно содержать подсказку 'Номер телефона'", field1.getAttribute("placeholder").equals(expectedPhonePlaceholder));
-            assertTrue("Поле 2 должно содержать подсказку 'Сумма'", field2.getAttribute("placeholder").equals(expectedAmountPlaceholder));
-            assertTrue("Поле 3 должно содержать подсказку 'E-mail для отправки чека'", field3.getAttribute("placeholder").equals(expectedEmailPlaceholder));
+            assertTrue(field1.getAttribute("placeholder").equals(expectedPhonePlaceholder), "Поле 1 должно содержать подсказку 'Номер телефона'");
+            assertTrue(field2.getAttribute("placeholder").equals(expectedAmountPlaceholder), "Поле 2 должно содержать подсказку 'Сумма'");
+            assertTrue(field3.getAttribute("placeholder").equals(expectedEmailPlaceholder), "Поле 3 должно содержать подсказку 'E-mail для отправки чека'");
         }
 
         private void waitForElement(By by) {
@@ -143,7 +143,7 @@ public class MtsSiteTest {
             }
         }
 
-        @After
+        @AfterEach
         public void tearDown() {
             if (driver != null) {
                 driver.quit();
