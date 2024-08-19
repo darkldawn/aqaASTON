@@ -1,25 +1,41 @@
+package src.main.java;
+
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.time.Duration;
 
- public class MtsAutoTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
+public class MtsAutoTest {
     private WebDriver driver;
+    private WebDriverWait wait;
+    private MainPage mainPage;
+
+    private final String chromeDriverPath = "/Users/darkldawn/Documents/GitHub/chromedriver";
+    private final String targetUrl = "https://www.mts.by";
+    private final String expectedBlockTitle = "Онлайн пополнение\nбез комиссии";
+    private final String testPhoneNumber = "297777777";
+    private final String testSum = "499";
+    private final String expectedUrlAfterClick = "https://www.mts.by/help/poryadok-oplaty-i-bezopasnost-internet-platezhey/";
 
     @BeforeEach
     public void setUp() {
-        System.setProperty("webdriver.chrome.driver", "/Users/darkldawn/Documents/GitHub/chromedriver");
+        System.setProperty("webdriver.chrome.driver", chromeDriverPath);
         driver = new ChromeDriver();
-        driver.get("http://mts.by");
-        WebElement button = driver.findElement(By.xpath("//*[@id='cookie-agree']"));
-        button.click();
+        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        driver.get(targetUrl);
+
+        mainPage = new MainPage(driver);
+        mainPage.agreeToCookies();
     }
 
     @AfterEach
@@ -29,41 +45,30 @@ import static org.junit.jupiter.api.Assertions.*;
 
     @Test
     public void testBlockName() {
-        WebElement blockElement = driver.findElement(By.xpath("//*[@id=\"pay-section\"]/div/div/div[2]/section/div/h2"));
-        String blockTitle = blockElement.getText();
-        if (blockTitle != null) {
-            assertEquals("Онлайн пополнение\nбез комиссии", blockTitle);
-        } else {
-            fail("Название блока не найдено");
-        }
+        String blockTitle = mainPage.getBlockTitle();
+        Assertions.assertNotNull(blockTitle, "Название блока не найдено");
+        assertEquals(expectedBlockTitle, blockTitle);
     }
 
     @Test
     public void testPaymentSystemLogos() {
-        int logoCount = driver.findElements(By.xpath("//*[@id=\"pay-section\"]/div/div/div[2]/section/div/div[2]/ul")).size();
-        assertTrue(logoCount > 0);
+        int logoCount = mainPage.getPaymentSystemLogoCount();
+        assertTrue(logoCount > 0, "Логотипы платежных систем не найдены.");
     }
 
     @Test
     public void testLinkToServiceDetails() {
-        WebElement linkElement = driver.findElement(By.xpath("//*[@id=\"pay-section\"]/div/div/div[2]/section/div/a"));
-        linkElement.click();
-        assertEquals("https://www.mts.by/help/poryadok-oplaty-i-bezopasnost-internet-platezhey/",
-                driver.getCurrentUrl());
-
+        mainPage.clickServiceDetailsLink();
+        assertEquals(expectedUrlAfterClick, driver.getCurrentUrl());
     }
 
     @Test
     public void testContinueButton() {
+        mainPage.enterPhone(testPhoneNumber);
+        mainPage.enterSum(testSum);
+        mainPage.clickContinueButton();
 
-        WebElement phoneField = driver.findElement(By.xpath("//*[@id=\"connection-phone\"]"));
-        phoneField.sendKeys("297777777");
-
-        WebElement amountField = driver.findElement(By.xpath("//*[@id=\"connection-sum\"]"));
-        amountField.sendKeys("450");
-
-        WebElement continueButton = driver.findElement(By.xpath("//*[@id=\"pay-connection\"]/button"));
-        continueButton.click();
-        assertTrue(driver.getCurrentUrl().contains("https://www.mts.by"));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("bepaid-iframe"))); // Замените на реальный класс iframe
+        assertTrue(driver.findElement(By.className("bepaid-iframe")).isDisplayed(), "Frame did not open correctly.");
     }
 }
