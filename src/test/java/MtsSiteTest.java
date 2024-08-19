@@ -14,7 +14,7 @@ public class MtsSiteTest {
     private WebDriver driver;
     private MtsPage mtsPage;
 
-    // Определение констант
+    
     private static final String DRIVER_PATH = "/Users/darkldawn/Documents/GitHub/chromedriver";
     private static final String BASE_URL = "https://www.mts.by";
 
